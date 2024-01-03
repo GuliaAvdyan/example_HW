@@ -11,42 +11,32 @@ public class LoginTests {
     @Test
     void successfulLoginTest() {
         open("https://qa.guru/cms/system/login");
-
         $("[name=email]").setValue("qagurubot@gmail.com");
         $("[name=password]").setValue("qagurupassword");
         $(".btn-success").click();
         $(".main-header__login").click();
-
         $(".logined-form").shouldHave(text("QA_GURU_BOT"));
     }
 
     @Test
-    void successfulLoginWithCommentsTest() {
-//        Открыть форму авторизации
-//        https://qa.guru/cms/system/login
-//        Ввести адрес электронной почты
-//        Ввести пароль
-//        Нажать кнопку "Войти"
-//        Нажать на кнопку "Личный кабинет"
-//        Проверить успешную авторизацию
-
-        Configuration.holdBrowserOpen = true;
-        Configuration.browser = "firefox";
-        Configuration.browserSize = "1920x1080";
-
-//        Открыть форму авторизации
+    void wrongPasswordLoginTest() {
         open("https://qa.guru/cms/system/login");
-
-//        Ввести адрес электронной почты
         $("[name=email]").setValue("qagurubot@gmail.com");
-//        Ввести пароль
-        $("[name=password]").setValue("qagurupassword");
-//        Нажать кнопку "Войти"
-        $(".btn-success").click();
-//        Нажать на кнопку "Личный кабинет"
-        $(".main-header__login").click();
+        $("[name=password]").setValue("12345").pressEnter();
+        $(".btn-success").shouldHave(text("Неверный пароль"));
+    }
 
-//        Проверить успешную авторизацию
-        $(".logined-form").shouldHave(text("QA_GURU_BOT"));
+    @Test
+    void missingPasswordLoginTest() {
+        open("https://qa.guru/cms/system/login");
+        $("[name=email]").setValue("qagurubot@gmail.com").pressEnter();
+        $(".btn-success").shouldHave(text("Не заполнено поле Пароль"));
+    }
+
+    @Test
+    void missingEmailLoginTest() {
+        open("https://qa.guru/cms/system/login");
+        $("[name=email]").pressEnter();
+        $(".btn-success").shouldHave(text("Не заполнено поле E-Mail"));
     }
 }
