@@ -37,6 +37,7 @@ public class LoginTests {
     void missingEmailLoginTest() {
         open("https://qa.guru/cms/system/login");
         $("[name=email]").pressEnter();
+        //$(".btn-success").click();
         $(".btn-success").shouldHave(text("Не заполнено поле E-Mail"));
     }
 }
